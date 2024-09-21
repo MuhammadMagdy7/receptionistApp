@@ -2,6 +2,19 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+connect with mongodb you have three ways
+first 
+install mongodb server locally 
+second 
+connect with atlls server
+third 
+connect with docker mongodb server
+
+
+and then 
+
+write ' npm i ' in cmd to install node_models folder
+
 First, run the development server:
 
 ```bash
