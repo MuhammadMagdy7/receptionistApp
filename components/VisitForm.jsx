@@ -1,6 +1,6 @@
 // components/VisitForm.jsx
 import { useState } from 'react';
-import PersonOrganizationSearch from './PersonOrganizationSearch';
+import PersonSearch from './PersonSearch';
 
 export default function VisitForm({ onSubmit }) {
   const [visitorName, setVisitorName] = useState('');
@@ -9,32 +9,10 @@ export default function VisitForm({ onSubmit }) {
   const [visitPurpose, setVisitPurpose] = useState('');
   const [error, setError] = useState('');
 
-  const handlePersonOrganizationSelect = (item) => {
-    if (item.type === 'person') {
-      setVisitorName(item.name);
-      setVisitorTitle(item.title);
-      setVisitorOrganization(item.organization.name);
-    } else {
-      setVisitorOrganization(item.name);
-    }
-  };
-
-  const handleAddNewOrganization = async (name) => {
-    try {
-      const response = await fetch('/api/organizations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
-      });
-      if (response.ok) {
-        const newOrg = await response.json();
-        setVisitorOrganization(newOrg.name);
-      } else {
-        throw new Error('Failed to add organization');
-      }
-    } catch (error) {
-      setError('فشل في إضافة الجهة الجديدة');
-    }
+  const handlePersonSelect = (person) => {
+    setVisitorName(person.name);
+    setVisitorTitle(person.title);
+    setVisitorOrganization(person.organization.name);
   };
 
   const handleSubmit = (e) => {
@@ -44,7 +22,6 @@ export default function VisitForm({ onSubmit }) {
       return;
     }
     onSubmit({ visitorName, visitorTitle, visitorOrganization, visitPurpose });
-    // إعادة تعيين حقول النموذج
     setVisitorName('');
     setVisitorTitle('');
     setVisitorOrganization('');
@@ -53,47 +30,56 @@ export default function VisitForm({ onSubmit }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-      <PersonOrganizationSearch 
-        onSelect={handlePersonOrganizationSelect}
-        onAddNewOrganization={handleAddNewOrganization}
-      />
-      <input
-        type="text"
-        value={visitorName}
-        onChange={(e) => setVisitorName(e.target.value)}
-        placeholder="اسم الزائر"
-        className="w-full p-2 mb-2 border rounded"
-        required
-      />
-      <input
-        type="text"
-        value={visitorTitle}
-        onChange={(e) => setVisitorTitle(e.target.value)}
-        placeholder="الصفة"
-        className="w-full p-2 mb-2 border rounded"
-        required
-      />
-      <input
-        type="text"
-        value={visitorOrganization}
-        onChange={(e) => setVisitorOrganization(e.target.value)}
-        placeholder="الجهة"
-        className="w-full p-2 mb-2 border rounded"
-        required
-      />
-      <input
-        type="text"
-        value={visitPurpose}
-        onChange={(e) => setVisitPurpose(e.target.value)}
-        placeholder="سبب الزيارة"
-        className="w-full p-2 mb-2 border rounded"
-        required
-      />
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
-        تسجيل الزيارة
-      </button>
+    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <h2 className="text-2xl font-bold mb-6 text-center">تسجيل زيارة جديدة</h2>
+      {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+      <div className="mb-6">
+        <PersonSearch onSelect={handlePersonSelect} />
+      </div>
+      <div className="mb-4">
+        <input
+          type="text"
+          value={visitorName}
+          onChange={(e) => setVisitorName(e.target.value)}
+          placeholder="اسم الزائر"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <input
+          type="text"
+          value={visitorTitle}
+          onChange={(e) => setVisitorTitle(e.target.value)}
+          placeholder="الصفة"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <input
+          type="text"
+          value={visitorOrganization}
+          onChange={(e) => setVisitorOrganization(e.target.value)}
+          placeholder="الجهة"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          required
+        />
+      </div>
+      <div className="mb-6">
+        <textarea
+          value={visitPurpose}
+          onChange={(e) => setVisitPurpose(e.target.value)}
+          placeholder="سبب الزيارة"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-24"
+          required
+        />
+      </div>
+      <div className="flex items-center justify-between">
+        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+          تسجيل الزيارة
+        </button>
+      </div>
     </form>
   );
 }

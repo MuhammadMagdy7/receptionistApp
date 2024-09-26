@@ -15,6 +15,7 @@ export default function AddPersonPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  
   useEffect(() => {
     fetch('/api/organizations')
       .then(res => res.json())
