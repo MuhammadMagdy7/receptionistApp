@@ -32,12 +32,9 @@ export default function Navbar() {
             </Link>
           )}
           {session ? (
-            <div>
-              <Link href="/visit-history" className="text-white mr-4">السجل</Link>
-              <button onClick={() => signOut()} className="text-white">
-                تسجيل الخروج
-              </button>
-            </div>
+            <button onClick={() => signOut()} className="text-white">
+              تسجيل الخروج
+            </button>
           ) : (
             <Link href="/api/auth/signin" className="text-white">
               تسجيل الدخول
