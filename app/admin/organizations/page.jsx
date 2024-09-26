@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import AccessDenied from '@/components/AccessDenied';
+import toast from 'react-hot-toast';
 
 export default function OrganizationsPage() {
   const [organizations, setOrganizations] = useState([]);
@@ -37,6 +38,7 @@ export default function OrganizationsPage() {
         const response = await fetch(`/api/organizations/${id}`, {
           method: 'DELETE',
         });
+        if (response.ok) toast.success('تم الحذف بنجاح')
         if (!response.ok) throw new Error('Failed to delete organization');
         setOrganizations(organizations.filter(org => org._id !== id));
       } catch (err) {

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import AccessDenied from '@/components/AccessDenied';
+import toast from 'react-hot-toast';
 
 export default function PeoplePage() {
   const [people, setPeople] = useState([]);
@@ -59,6 +60,7 @@ export default function PeoplePage() {
         const response = await fetch(`/api/people/${id}`, {
           method: 'DELETE',
         });
+        if (response.ok) toast.success('تم الحذف بنجاح')
         if (!response.ok) throw new Error('Failed to delete person');
         setPeople(people.filter(person => person._id !== id));
       } catch (err) {
@@ -73,7 +75,8 @@ export default function PeoplePage() {
   }
 
   if (isLoading) return <p>جاري تحميل البيانات...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (error) return toast.error(error);
+
 
   const filteredPeople = selectedOrganizationId
   ? people.filter((person) => person.organization._id === selectedOrganizationId)
@@ -102,7 +105,7 @@ export default function PeoplePage() {
             <div>
               <p><strong>الاسم:</strong> {person.name}</p>
               <p><strong>الصفة:</strong> {person.title}</p>
-              <p><strong>الجهة:</strong> {person.organization.name}</p>
+              <p><strong>الجهة:</strong> {person.organization?.name}</p>
             </div>
             <div>
               <Link href={`/admin/edit-person/${person._id}`} className="bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 mr-2">

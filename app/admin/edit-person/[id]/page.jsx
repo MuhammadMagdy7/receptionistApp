@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import AccessDenied from '@/components/AccessDenied';
+import toast from 'react-hot-toast';
 
 export default function EditPersonPage({ params }) {
   const [name, setName] = useState('');
@@ -107,7 +108,7 @@ export default function EditPersonPage({ params }) {
           تحديث الشخص
         </button>
       </form>
-      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {error && toast.error(error)}
     </div>
   );
 }

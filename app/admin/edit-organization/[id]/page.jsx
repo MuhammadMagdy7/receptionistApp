@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import AccessDenied from '@/components/AccessDenied';
+import toast from 'react-hot-toast';
 
 export default function EditOrganizationPage({ params }) {
   const [organizationName, setOrganizationName] = useState('');
@@ -43,7 +44,8 @@ export default function EditOrganizationPage({ params }) {
 
       if (!response.ok) throw new Error('Failed to update organization');
 
-      alert('تم تحديث الجهة بنجاح');
+      toast.success('تم تحديث الجهة بنجاح');
+
       router.push('/admin/organizations');
     } catch (err) {
       setError('حدث خطأ أثناء تحديث الجهة');
@@ -71,7 +73,7 @@ export default function EditOrganizationPage({ params }) {
           تحديث الجهة
         </button>
       </form>
-      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {error &&toast.error(error)}
     </div>
   );
 }

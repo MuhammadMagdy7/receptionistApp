@@ -10,6 +10,7 @@ import VisitList from '@/components/VisitList';
 import { useWebSocket } from '@/contexts/WebSocketContext';
 import { emitAddVisit, emitDeleteVisit } from '@/lib/socket';
 import SoundPlayer from '@/components/SoundPlayer';
+import toast from 'react-hot-toast';
 
 export default function ReceptionistPage() {
   const { data: session, status } = useSession();
@@ -43,16 +44,19 @@ export default function ReceptionistPage() {
         console.log('Visit updated:', updatedVisit);
         dispatch(updateVisitInStore(updatedVisit));
         setPlaySound(true);
+        toast.success('تم تحديث الزيارة');
       });
 
       socket.on('visit:added', (newVisit) => {
         console.log('New visit added:', newVisit);
         dispatch(addVisitToStore(newVisit));
+        toast.success('تمت إضافة زيارة جديدة');
       });
 
       socket.on('visit:deleted', (deletedVisitId) => {
         console.log('Visit deleted:', deletedVisitId);
         dispatch(removeVisitFromStore(deletedVisitId));
+        toast.success('تم حذف الزيارة');
       });
 
       socket.on('visit:error', (error) => {
@@ -74,8 +78,11 @@ export default function ReceptionistPage() {
       // حذف _id من البيانات إذا كان موجودًا
       const { _id, ...newVisitData } = visitData;
       emitAddVisit(newVisitData);
+      toast.success('تمت إضافة الزيارة بنجاح');
     } catch (error) {
       console.error('Error adding visit:', error);
+      toast.error('حدث خطأ أثناء إضافة الزيارة');
+
     }
   };
 
@@ -83,8 +90,11 @@ export default function ReceptionistPage() {
     if (window.confirm('هل أنت متأكد من رغبتك في حذف هذه الزيارة؟')) {
       try {
         emitDeleteVisit(id);
+        toast.success('تم حذف الزيارة بنجاح');
+
       } catch (error) {
         console.error('Error deleting visit:', error);
+        toast.error('حدث خطأ أثناء حذف الزيارة');
       }
     }
   };

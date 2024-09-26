@@ -2,6 +2,7 @@
 import './globals.css';
 import ClientProviders from './ClientProviders';
 import Navbar from '@/components/Navbar';
+import { Toaster } from 'react-hot-toast';
 
 export default function RootLayout({ children }) {
   return (
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
           <main className="container mx-auto mt-8">
             {children}
           </main>
+          <Toaster position="bottom-right" />
         </ClientProviders>
       </body>
     </html>

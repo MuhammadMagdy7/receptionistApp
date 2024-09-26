@@ -66,7 +66,6 @@ export default function ManagerPage() {
     return <p>جارٍ التحميل...</p>;
   }
   
-  const visibleVisits = visits.filter(visit => !visit.isHidden);
 
   return (
     <div className="container mx-auto p-4">

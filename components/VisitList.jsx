@@ -1,6 +1,6 @@
 // components/VisitList.jsx
 import PropTypes from 'prop-types';
-import { formatDistanceToNow, format } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { ar } from 'date-fns/locale';
 
 export default function VisitList({ visits, showActions = false, onStatusUpdate, onDeleteVisit, showStatusButtons = true }) {
@@ -26,11 +26,14 @@ export default function VisitList({ visits, showActions = false, onStatusUpdate,
     }
   };
 
+  // ترتيب الزيارات من الأقدم إلى الأحدث
+  const sortedVisits = [...visits].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
   return (
     <div className="mt-4">
       <h2 className="text-xl font-semibold mb-2">قائمة الزيارات</h2>
       <ul className="space-y-2">
-        {visits.map((visit) => (
+        {sortedVisits.map((visit) => (
           <li key={visit._id} className={`border p-4 rounded shadow ${getBackgroundColor(visit.status)}`}>
             <p><strong>الاسم:</strong> {visit.visitorName}</p>
             <p><strong>الصفة:</strong> {visit.visitorTitle}</p>

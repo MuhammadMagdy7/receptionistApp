@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
   const audioRef = useRef(null);
@@ -15,6 +16,8 @@ export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
         .catch(error => {
           console.error('Error playing sound:', error);
           setIsAudioEnabled(false); // Reset if there's an error
+          toast.error('فشل تشغيل الصوت. يرجى تفعيل الإشعارات الصوتية.');
+
         });
     }
   }, [play, isMuted, isAudioEnabled]);
@@ -33,6 +36,8 @@ export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
+    toast.success(isMuted ? 'تم تفعيل الصوت' : 'تم كتم الصوت');
+
   };
 
   const enableAudio = async () => {
@@ -49,9 +54,13 @@ export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
         // If we reach here, audio is enabled
         setIsAudioEnabled(true);
         console.log('Audio enabled successfully');
+        toast.success('تم تفعيل الإشعارات الصوتية');
+
       }
     } catch (error) {
       console.error('Error enabling audio:', error);
+      toast.error('فشل تفعيل الإشعارات الصوتية. يرجى المحاولة مرة أخرى.');
+
     }
   };
 
@@ -61,10 +70,14 @@ export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
         .then(() => {
           console.log('Test sound played successfully');
           setIsAudioEnabled(true);
+          toast.success('تم تشغيل الصوت بنجاح');
+
         })
         .catch(error => {
           console.error('Error playing test sound:', error);
           setIsAudioEnabled(false);
+          toast.error('فشل تشغيل الصوت. يرجى تفعيل الإشعارات الصوتية.');
+
         });
     }
   };

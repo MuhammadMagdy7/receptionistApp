@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import AccessDenied from '@/components/AccessDenied';
+import toast from 'react-hot-toast';
 
 export default function AddPersonPage() {
   const [name, setName] = useState('');
@@ -45,10 +46,13 @@ export default function AddPersonPage() {
       setName('');
       setTitle('');
       setOrganizationId('');
-      alert('تمت إضافة الشخص بنجاح');
+      toast.success('تمت إضافة الشخص بنجاح');
+
       router.push('/admin/people'); // افتراض وجود صفحة لعرض الأشخاص
     } catch (err) {
       setError('حدث خطأ أثناء إضافة الشخص');
+      toast.error('حدث خطأ أثناء إضافة الجهة');
+
     }
   };
 
@@ -87,7 +91,7 @@ export default function AddPersonPage() {
           إضافة الشخص
         </button>
       </form>
-      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {error && toast.error(error)}
     </div>
   );
 }

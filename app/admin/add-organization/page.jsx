@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import AccessDenied from '@/components/AccessDenied';
+import toast from 'react-hot-toast';
 
 export default function AddOrganizationPage() {
   const [organizationName, setOrganizationName] = useState('');
@@ -32,10 +33,13 @@ export default function AddOrganizationPage() {
 
       const data = await response.json();
       setOrganizationName('');
-      alert('تمت إضافة الجهة بنجاح');
+      toast.success('تمت إضافة الجهة بنجاح');
+
       router.push('/admin/organizations'); // افتراض وجود صفحة لعرض الجهات
     } catch (err) {
       setError('حدث خطأ أثناء إضافة الجهة');
+      toast.error('حدث خطأ أثناء إضافة الجهة');
+
     }
   };
 
