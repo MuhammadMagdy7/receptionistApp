@@ -16,23 +16,22 @@ export default function SocketHandler(req, res) {
 
   io.on('connection', socket => {
     console.log(`New client connected: ${socket.id}`);
-    
+
     socket.on('disconnect', () => {
       console.log('Client disconnected');
     });
 
     socket.on('visit:add', async (data) => {
       try {
-        const { visitorName, visitorTitle, visitorOrganization, visitPurpose } = data;
-        const newVisit = await Visit.create({
-          visitorName,
-          visitorTitle,
-          visitorOrganization,
-          visitPurpose
-        });
+        // حذف _id من البيانات إذا كان موجودًا
+        const { _id, ...visitData } = data;
+        const newVisit = new Visit(visitData);
+        await newVisit.save();
         io.emit('visit:added', newVisit);
       } catch (error) {
         console.error('Error adding visit:', error);
+        // إرسال رسالة خطأ للعميل
+        socket.emit('visit:error', { message: 'Failed to add visit' });
       }
     });
 
@@ -59,6 +58,19 @@ export default function SocketHandler(req, res) {
         io.emit('visit:hidden', hiddenVisit._id);
       } catch (error) {
         console.error('Error hiding visit:', error);
+      }
+    });
+
+
+    socket.on('visit:delete', async (id) => {
+      try {
+        const deletedVisit = await Visit.findByIdAndDelete(id);
+        if (deletedVisit) {
+          io.emit('visit:deleted', id);
+        }
+      } catch (error) {
+        console.error('Error deleting visit:', error);
+        socket.emit('visit:error', { message: 'Failed to delete visit' });
       }
     });
 

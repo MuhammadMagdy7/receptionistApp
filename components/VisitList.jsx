@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { formatDistanceToNow, format } from 'date-fns';
 import { ar } from 'date-fns/locale';
 
-export default function VisitList({ visits, showActions = false, onStatusUpdate, onHideVisit, showStatusButtons = true }) {
+export default function VisitList({ visits, showActions = false, onStatusUpdate, onDeleteVisit, showStatusButtons = true }) {
   if (visits.length === 0) {
     return <p>لا توجد زيارات مسجلة.</p>;
   }
@@ -32,13 +32,13 @@ export default function VisitList({ visits, showActions = false, onStatusUpdate,
       <ul className="space-y-2">
         {visits.map((visit) => (
           <li key={visit._id} className={`border p-4 rounded shadow ${getBackgroundColor(visit.status)}`}>
-          <p><strong>الاسم:</strong> {visit.visitorName}</p>
-          <p><strong>الصفة:</strong> {visit.visitorTitle}</p>
-          <p><strong>الجهة:</strong> {visit.visitorOrganization}</p>
-          <p><strong>السبب:</strong> {visit.visitPurpose}</p>
-          <p><strong>الحالة:</strong> {getStatusInArabic(visit.status)}</p>
-          <p><strong>تم الإنشاء:</strong> {formatDistanceToNow(new Date(visit.createdAt), { addSuffix: true, locale: ar })}</p>
-          <p><strong>آخر تحديث:</strong> {formatDistanceToNow(new Date(visit.updatedAt), { addSuffix: true, locale: ar })}</p>
+            <p><strong>الاسم:</strong> {visit.visitorName}</p>
+            <p><strong>الصفة:</strong> {visit.visitorTitle}</p>
+            <p><strong>الجهة:</strong> {visit.visitorOrganization}</p>
+            <p><strong>السبب:</strong> {visit.visitPurpose}</p>
+            <p><strong>الحالة:</strong> {getStatusInArabic(visit.status)}</p>
+            <p><strong>تم الإنشاء:</strong> {formatDistanceToNow(new Date(visit.createdAt), { addSuffix: true, locale: ar })}</p>
+            <p><strong>آخر تحديث:</strong> {formatDistanceToNow(new Date(visit.updatedAt), { addSuffix: true, locale: ar })}</p>
             {showActions && (
               <div className="mt-2 flex space-x-2">
                 {showStatusButtons && (
@@ -63,12 +63,12 @@ export default function VisitList({ visits, showActions = false, onStatusUpdate,
                     </button>
                   </>
                 )}
-                {onHideVisit && (
+                {onDeleteVisit && (
                   <button 
-                    onClick={() => onHideVisit(visit._id)}
-                    className="bg-gray-500 text-white px-3 py-1 rounded"
+                    onClick={() => onDeleteVisit(visit._id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded"
                   >
-                    إخفاء
+                    حذف
                   </button>
                 )}
               </div>
@@ -80,11 +80,10 @@ export default function VisitList({ visits, showActions = false, onStatusUpdate,
   );
 }
 
-
 VisitList.propTypes = {
   visits: PropTypes.array.isRequired,
   showActions: PropTypes.bool,
   onStatusUpdate: PropTypes.func,
-  onHideVisit: PropTypes.func,
+  onDeleteVisit: PropTypes.func,
   showStatusButtons: PropTypes.bool,
 };

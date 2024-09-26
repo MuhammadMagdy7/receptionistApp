@@ -4,11 +4,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addVisitAsync, fetchVisits, hideVisitAsync, updateVisitInStore } from '@/lib/redux/visitSlice';
+import { addVisitAsync, fetchVisits, deleteVisitAsync, updateVisitInStore, addVisitToStore, removeVisitFromStore } from '@/lib/redux/visitSlice';
 import VisitForm from '@/components/VisitForm';
 import VisitList from '@/components/VisitList';
 import { useWebSocket } from '@/contexts/WebSocketContext';
-import { emitAddVisit, emitHideVisit } from '@/lib/socket';
+import { emitAddVisit, emitDeleteVisit } from '@/lib/socket';
 import SoundPlayer from '@/components/SoundPlayer';
 
 export default function ReceptionistPage() {
@@ -44,26 +44,49 @@ export default function ReceptionistPage() {
         setPlaySound(true);
       });
 
+      socket.on('visit:added', (newVisit) => {
+        console.log('New visit added:', newVisit);
+        dispatch(addVisitToStore(newVisit));
+        setPlaySound(true);
+      });
+
+      socket.on('visit:deleted', (deletedVisitId) => {
+        console.log('Visit deleted:', deletedVisitId);
+        dispatch(removeVisitFromStore(deletedVisitId));
+      });
+
+      socket.on('visit:error', (error) => {
+        console.error('Error from server:', error);
+        // يمكنك إضافة معالجة الخطأ هنا، مثل عرض رسالة للمستخدم
+      });
+
       return () => {
         socket.off('visit:updated');
+        socket.off('visit:added');
+        socket.off('visit:deleted');
+        socket.off('visit:error');
       };
     }
   }, [socket, dispatch]);
 
   const handleAddVisit = async (visitData) => {
     try {
-      const resultAction = await dispatch(addVisitAsync(visitData));
-      if (addVisitAsync.fulfilled.match(resultAction)) {
-        emitAddVisit(resultAction.payload);
-      }
+      // حذف _id من البيانات إذا كان موجودًا
+      const { _id, ...newVisitData } = visitData;
+      emitAddVisit(newVisitData);
     } catch (error) {
       console.error('Error adding visit:', error);
     }
   };
 
-  const handleHideVisit = (id) => {
-    dispatch(hideVisitAsync(id));
-    emitHideVisit(id);
+  const handleDeleteVisit = async (id) => {
+    if (window.confirm('هل أنت متأكد من رغبتك في حذف هذه الزيارة؟')) {
+      try {
+        emitDeleteVisit(id);
+      } catch (error) {
+        console.error('Error deleting visit:', error);
+      }
+    }
   };
 
   if (status === 'loading' || !session) {
@@ -77,9 +100,9 @@ export default function ReceptionistPage() {
       {fetchStatus === 'loading' && <p>جارٍ تحميل الزيارات...</p>}
       {error && <p className="text-red-500">خطأ: {error}</p>}
       <VisitList 
-        visits={visits.filter(visit => !visit.isHidden)} 
+        visits={visits} 
         showActions={true} 
-        onHideVisit={handleHideVisit}
+        onDeleteVisit={handleDeleteVisit}
         showStatusButtons={false}
       />
       <SoundPlayer 

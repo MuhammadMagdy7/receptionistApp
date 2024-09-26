@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateVisitStatusAsync, fetchVisits, addVisitToStore, hideVisitInStore } from '@/lib/redux/visitSlice';
+import { updateVisitStatusAsync, fetchVisits, addVisitToStore, removeVisitFromStore } from '@/lib/redux/visitSlice';
 import VisitList from '@/components/VisitList';
 import { useWebSocket } from '@/contexts/WebSocketContext';
 import { emitVisitUpdate } from '@/lib/socket';
@@ -42,13 +42,14 @@ export default function ManagerPage() {
         setPlaySound(true);
       });
 
-      socket.on('visit:hidden', (visitId) => {
-        dispatch(hideVisitInStore(visitId));
+      socket.on('visit:deleted', (deletedVisitId) => {
+        console.log('Visit deleted:', deletedVisitId);
+        dispatch(removeVisitFromStore(deletedVisitId));
       });
 
       return () => {
         socket.off('visit:added');
-        socket.off('visit:hidden');
+        socket.off('visit:deleted');
       };
     }
   }, [socket, dispatch]);
