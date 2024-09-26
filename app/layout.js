@@ -7,13 +7,13 @@ import { Toaster } from 'react-hot-toast';
 export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
-      <body className="bg-gray-100">
+      <body className="bg-background">
         <ClientProviders>
           <Navbar />
           <main className="container mx-auto mt-8">
             {children}
           </main>
-          <Toaster position="bottom-right" />
+          <Toaster position="bottom-left" />
         </ClientProviders>
       </body>
     </html>

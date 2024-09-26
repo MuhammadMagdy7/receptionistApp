@@ -1,4 +1,4 @@
-// components/VisitList.jsx
+// app/components/VisitList
 import PropTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
 import { ar } from 'date-fns/locale';
@@ -10,10 +10,10 @@ export default function VisitList({ visits, showActions = false, onStatusUpdate,
 
   const getBackgroundColor = (status) => {
     switch(status) {
-      case 'accepted': return 'bg-green-200';
-      case 'rejected': return 'bg-red-200';
-      case 'pending': return 'bg-yellow-200';
-      default: return 'bg-gray-200';
+      case 'accepted': return 'bg-accepted';
+      case 'rejected': return 'bg-rejected';
+      case 'pending': return 'bg-pending';
+      default: return 'bg-default';
     }
   };
 
@@ -26,59 +26,74 @@ export default function VisitList({ visits, showActions = false, onStatusUpdate,
     }
   };
 
-  // ترتيب الزيارات من الأقدم إلى الأحدث
   const sortedVisits = [...visits].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
   return (
     <div className="mt-4">
-      <h2 className="text-xl font-semibold mb-2">قائمة الزيارات</h2>
-      <ul className="space-y-2">
-        {sortedVisits.map((visit) => (
-          <li key={visit._id} className={`border p-4 rounded shadow ${getBackgroundColor(visit.status)}`}>
-            <p><strong>الاسم:</strong> {visit.visitorName}</p>
-            <p><strong>الصفة:</strong> {visit.visitorTitle}</p>
-            <p><strong>الجهة:</strong> {visit.visitorOrganization}</p>
-            <p><strong>السبب:</strong> {visit.visitPurpose}</p>
-            <p><strong>الحالة:</strong> {getStatusInArabic(visit.status)}</p>
-            <p><strong>تم الإنشاء:</strong> {formatDistanceToNow(new Date(visit.createdAt), { addSuffix: true, locale: ar })}</p>
-            <p><strong>آخر تحديث:</strong> {formatDistanceToNow(new Date(visit.updatedAt), { addSuffix: true, locale: ar })}</p>
-            {showActions && (
-              <div className="mt-2 flex space-x-2">
-                {showStatusButtons && (
-                  <>
-                    <button 
-                      onClick={() => onStatusUpdate(visit._id, 'accepted')}
-                      className="bg-green-500 text-white px-3 py-1 rounded"
-                    >
-                      قبول
-                    </button>
-                    <button 
-                      onClick={() => onStatusUpdate(visit._id, 'rejected')}
-                      className="bg-red-500 text-white px-3 py-1 rounded"
-                    >
-                      رفض
-                    </button>
-                    <button 
-                      onClick={() => onStatusUpdate(visit._id, 'pending')}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded"
-                    >
-                      انتظار
-                    </button>
-                  </>
-                )}
-                {onDeleteVisit && (
-                  <button 
-                    onClick={() => onDeleteVisit(visit._id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded"
-                  >
-                    حذف
-                  </button>
-                )}
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
+      <h2 className="text-xl font-semibold mb-2 text-center">قائمة الزيارات</h2>
+      <table className="min-w-full bg-white border rounded shadow-md">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="py-3 px-4 border-b">الاسم</th>
+            <th className="py-3 px-4 border-b">الصفة</th>
+            <th className="py-3 px-4 border-b">الجهة</th>
+            <th className="py-3 px-4 border-b">السبب</th>
+            <th className="py-3 px-4 border-b">الحالة</th>
+            <th className="py-3 px-4 border-b">تم الإنشاء</th>
+            <th className="py-3 px-4 border-b">آخر تحديث</th>
+            {showActions && <th className="py-3 px-4 border-b">الإجراءات</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {sortedVisits.map((visit) => (
+            <tr key={visit._id} className={`${getBackgroundColor(visit.status)} text-center transition`}>
+              <td className="border px-4 py-2">{visit.visitorName}</td>
+              <td className="border px-4 py-2">{visit.visitorTitle}</td>
+              <td className="border px-4 py-2">{visit.visitorOrganization}</td>
+              <td className="border px-4 py-2">{visit.visitPurpose}</td>
+              <td className="border px-4 py-2">{getStatusInArabic(visit.status)}</td>
+              <td className="border px-4 py-2">{formatDistanceToNow(new Date(visit.createdAt), { addSuffix: true, locale: ar })}</td>
+              <td className="border px-4 py-2">{formatDistanceToNow(new Date(visit.updatedAt), { addSuffix: true, locale: ar })}</td>
+              {showActions && (
+                <td className="border px-4 py-2">
+                  <div className="flex justify-center space-x-2">
+                    {showStatusButtons && (
+                      <div className='flex gap-2'>
+                        <button 
+                          onClick={() => onStatusUpdate(visit._id, 'accepted')}
+                          className="bg-secondary text-white px-3 py-1 rounded hover:bg-secondaryHover"
+                        >
+                          قبول
+                        </button>
+                        <button 
+                          onClick={() => onStatusUpdate(visit._id, 'rejected')}
+                          className="bg-danger text-white px-3 py-1 rounded hover:bg-dangerHover"
+                        >
+                          رفض
+                        </button>
+                        <button 
+                          onClick={() => onStatusUpdate(visit._id, 'pending')}
+                          className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                        >
+                          انتظار
+                        </button>
+                      </div>
+                    )}
+                    {onDeleteVisit && (
+                      <button 
+                        onClick={() => onDeleteVisit(visit._id)}
+                        className="bg-danger text-white px-3 py-1 rounded hover:bg-dangerHover"
+                      >
+                        حذف
+                      </button>
+                    )}
+                  </div>
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

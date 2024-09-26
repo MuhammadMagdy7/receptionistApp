@@ -9,14 +9,14 @@ async function createUsers() {
   var users = [
     {
       name: 'مدير النظام',
-      email: 'manager@example.com',
-      password: bcrypt.hashSync('managerpassword', 10),
+      email: 'admin@admin.com',
+      password: bcrypt.hashSync('admin1234', 10),
       role: 'manager'
     },
     {
       name: 'مستقبل النظام',
-      email: 'receptionist@example.com',
-      password: bcrypt.hashSync('receptionistpassword', 10),
+      email: 'user@user.com',
+      password: bcrypt.hashSync('user1234', 10),
       role: 'receptionist'
     }
   ];

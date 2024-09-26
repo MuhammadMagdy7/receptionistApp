@@ -31,35 +31,32 @@ export default function AddOrganizationPage() {
 
       if (!response.ok) throw new Error('Failed to add organization');
 
-      const data = await response.json();
       setOrganizationName('');
       toast.success('تمت إضافة الجهة بنجاح');
-
-      router.push('/admin/organizations'); // افتراض وجود صفحة لعرض الجهات
+      router.push('/admin/organizations');
     } catch (err) {
       setError('حدث خطأ أثناء إضافة الجهة');
       toast.error('حدث خطأ أثناء إضافة الجهة');
-
     }
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">إضافة جهة عمل جديدة</h1>
-      <form onSubmit={handleSubmit} className="max-w-md">
+      <h1 className="text-2xl font-bold mb-4 text-center">إضافة جهة عمل جديدة</h1>
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
         <input
           type="text"
           value={organizationName}
           onChange={(e) => setOrganizationName(e.target.value)}
           placeholder="اسم الجهة"
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+        <button type="submit" className="w-full bg-primary text-white p-3 rounded hover:bg-primaryHover transition">
           إضافة الجهة
         </button>
       </form>
-      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {error && <p className="text-danger mt-4 text-center">{error}</p>}
     </div>
   );
 }

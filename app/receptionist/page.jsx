@@ -25,7 +25,6 @@ export default function ReceptionistPage() {
     setPlaySound(false);
   }, []);
 
-
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) signIn();
@@ -61,7 +60,6 @@ export default function ReceptionistPage() {
 
       socket.on('visit:error', (error) => {
         console.error('Error from server:', error);
-        // يمكنك إضافة معالجة الخطأ هنا، مثل عرض رسالة للمستخدم
       });
 
       return () => {
@@ -75,14 +73,12 @@ export default function ReceptionistPage() {
 
   const handleAddVisit = async (visitData) => {
     try {
-      // حذف _id من البيانات إذا كان موجودًا
       const { _id, ...newVisitData } = visitData;
       emitAddVisit(newVisitData);
       toast.success('تمت إضافة الزيارة بنجاح');
     } catch (error) {
       console.error('Error adding visit:', error);
       toast.error('حدث خطأ أثناء إضافة الزيارة');
-
     }
   };
 
@@ -91,7 +87,6 @@ export default function ReceptionistPage() {
       try {
         emitDeleteVisit(id);
         toast.success('تم حذف الزيارة بنجاح');
-
       } catch (error) {
         console.error('Error deleting visit:', error);
         toast.error('حدث خطأ أثناء حذف الزيارة');
@@ -105,23 +100,21 @@ export default function ReceptionistPage() {
 
   return (
     <div className="container mx-auto p-4">
-            <SoundPlayer 
+      <SoundPlayer 
         soundUrl="/notification.mp3" 
         play={playSound}
         onPlayEnd={handlePlayEnd}
       />
-      <h1 className="text-2xl font-bold mb-4">صفحة الاستقبال</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">صفحة الاستقبال</h1>
       <VisitForm onSubmit={handleAddVisit} />
       {fetchStatus === 'loading' && <p>جارٍ تحميل الزيارات...</p>}
-      {error && <p className="text-red-500">خطأ: {error}</p>}
+      {error && <p className="text-danger">خطأ: {error}</p>}
       <VisitList 
         visits={visits} 
         showActions={true} 
         onDeleteVisit={handleDeleteVisit}
         showStatusButtons={false}
       />
-
-
     </div>
   );
 }

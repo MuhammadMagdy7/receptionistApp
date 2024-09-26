@@ -61,10 +61,11 @@ export default function EditPersonPage({ params }) {
 
       if (!response.ok) throw new Error('Failed to update person');
 
-      alert('تم تحديث الشخص بنجاح');
+      toast.success('تم تحديث الشخص بنجاح');
       router.push('/admin/people');
     } catch (err) {
       setError('حدث خطأ أثناء تحديث الشخص');
+      toast.error('حدث خطأ أثناء تحديث الشخص');
     }
   };
 
@@ -75,14 +76,14 @@ export default function EditPersonPage({ params }) {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">تعديل الشخص</h1>
-      <form onSubmit={handleSubmit} className="max-w-md">
+      <h1 className="text-2xl font-bold mb-4 text-center">تعديل الشخص</h1>
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="الاسم"
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
         <input
@@ -90,13 +91,13 @@ export default function EditPersonPage({ params }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="الصفة"
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
         <select
           value={organizationId}
           onChange={(e) => setOrganizationId(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
           required
         >
           <option value="">اختر الجهة</option>
@@ -104,11 +105,11 @@ export default function EditPersonPage({ params }) {
             <option key={org._id} value={org._id}>{org.name}</option>
           ))}
         </select>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+        <button type="submit" className="w-full bg-primary text-white p-3 rounded hover:bg-primaryHover transition">
           تحديث الشخص
         </button>
       </form>
-      {error && toast.error(error)}
+      {error && <p className="text-danger mt-4 text-center">{error}</p>}
     </div>
   );
 }

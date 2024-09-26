@@ -8,7 +8,7 @@ export default function AccessDenied() {
       <p className="mb-4">يجب عليك تسجيل الدخول للوصول إلى هذه الصفحة.</p>
       <button
         onClick={() => signIn()}
-        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        className="bg-primary text-white p-3 rounded hover:bg-primaryHover transition"
       >
         تسجيل الدخول
       </button>

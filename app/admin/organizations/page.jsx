@@ -38,7 +38,7 @@ export default function OrganizationsPage() {
         const response = await fetch(`/api/organizations/${id}`, {
           method: 'DELETE',
         });
-        if (response.ok) toast.success('تم الحذف بنجاح')
+        if (response.ok) toast.success('تم الحذف بنجاح');
         if (!response.ok) throw new Error('Failed to delete organization');
         setOrganizations(organizations.filter(org => org._id !== id));
       } catch (err) {
@@ -53,29 +53,37 @@ export default function OrganizationsPage() {
   }
 
   if (isLoading) return <p>جاري تحميل البيانات...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (error) return <p className="text-danger">{error}</p>;
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">قائمة الجهات</h1>
-      <Link href="/admin/add-organization" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-4 inline-block">
+      <h1 className="text-2xl font-bold mb-4 text-center">قائمة الجهات</h1>
+      <Link href="/admin/add-organization" className="bg-primary text-white p-3 rounded hover:bg-primaryHover mb-4 inline-block">
         إضافة جهة جديدة
       </Link>
-      <ul className="mt-4">
-        {organizations.map((org) => (
-          <li key={org._id} className="border p-2 mb-2 rounded flex justify-between items-center">
-            <span><strong>اسم الجهة:</strong> {org.name}</span>
-            <div>
-              <Link href={`/admin/edit-organization/${org._id}`} className="bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 mr-2">
-                تعديل
-              </Link>
-              <button onClick={() => handleDelete(org._id)} className="bg-red-500 text-white p-2 rounded hover:bg-red-600">
-                حذف
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <table className="min-w-full bg-white border rounded shadow-md">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="py-3 px-4 border-b">اسم الجهة</th>
+            <th className="py-3 px-4 border-b">الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {organizations.map((org) => (
+            <tr key={org._id} className="text-center hover:bg-gray-100 transition">
+              <td className="border px-4 py-2">{org.name}</td>
+              <td className="border flex gap-2 justify-center py-2">
+                <Link href={`/admin/edit-organization/${org._id}`} className="bg-secondary text-white p-2 rounded hover:bg-secondaryHover mr-2">
+                  تعديل
+                </Link>
+                <button onClick={() => handleDelete(org._id)} className="bg-danger text-white p-2 rounded hover:bg-dangerHover">
+                  حذف
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

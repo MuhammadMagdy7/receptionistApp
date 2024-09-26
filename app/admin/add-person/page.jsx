@@ -16,7 +16,6 @@ export default function AddPersonPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  
   useEffect(() => {
     fetch('/api/organizations')
       .then(res => res.json())
@@ -42,30 +41,27 @@ export default function AddPersonPage() {
 
       if (!response.ok) throw new Error('Failed to add person');
 
-      const data = await response.json();
       setName('');
       setTitle('');
       setOrganizationId('');
       toast.success('تمت إضافة الشخص بنجاح');
-
-      router.push('/admin/people'); // افتراض وجود صفحة لعرض الأشخاص
+      router.push('/admin/people');
     } catch (err) {
       setError('حدث خطأ أثناء إضافة الشخص');
-      toast.error('حدث خطأ أثناء إضافة الجهة');
-
+      toast.error('حدث خطأ أثناء إضافة الشخص');
     }
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">إضافة شخص جديد</h1>
-      <form onSubmit={handleSubmit} className="max-w-md">
+      <h1 className="text-2xl font-bold mb-4 text-center">إضافة شخص جديد</h1>
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="الاسم"
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
         <input
@@ -73,13 +69,13 @@ export default function AddPersonPage() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="الصفة"
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
         <select
           value={organizationId}
           onChange={(e) => setOrganizationId(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
           required
         >
           <option value="">اختر الجهة</option>
@@ -87,11 +83,11 @@ export default function AddPersonPage() {
             <option key={org._id} value={org._id}>{org.name}</option>
           ))}
         </select>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+        <button type="submit" className="w-full bg-primary text-white p-3 rounded hover:bg-primaryHover transition">
           إضافة الشخص
         </button>
       </form>
-      {error && toast.error(error)}
+      {error && <p className="text-danger mt-4 text-center">{error}</p>}
     </div>
   );
 }

@@ -15,9 +15,8 @@ export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
         .then(() => console.log('Sound played successfully'))
         .catch(error => {
           console.error('Error playing sound:', error);
-          setIsAudioEnabled(false); // Reset if there's an error
+          setIsAudioEnabled(false);
           toast.error('فشل تشغيل الصوت. يرجى تفعيل الإشعارات الصوتية.');
-
         });
     }
   }, [play, isMuted, isAudioEnabled]);
@@ -37,13 +36,11 @@ export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
   const toggleMute = () => {
     setIsMuted(!isMuted);
     toast.success(isMuted ? 'تم تفعيل الصوت' : 'تم كتم الصوت');
-
   };
 
   const enableAudio = async () => {
     try {
       if (audioRef.current) {
-        // Create a short, silent audio buffer
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const buffer = audioContext.createBuffer(1, 1, 22050);
         const source = audioContext.createBufferSource();
@@ -51,16 +48,13 @@ export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
         source.connect(audioContext.destination);
         await source.start(0);
         
-        // If we reach here, audio is enabled
         setIsAudioEnabled(true);
         console.log('Audio enabled successfully');
         toast.success('تم تفعيل الإشعارات الصوتية');
-
       }
     } catch (error) {
       console.error('Error enabling audio:', error);
       toast.error('فشل تفعيل الإشعارات الصوتية. يرجى المحاولة مرة أخرى.');
-
     }
   };
 
@@ -71,24 +65,22 @@ export default function SoundPlayer({ soundUrl, play, onPlayEnd }) {
           console.log('Test sound played successfully');
           setIsAudioEnabled(true);
           toast.success('تم تشغيل الصوت بنجاح');
-
         })
         .catch(error => {
           console.error('Error playing test sound:', error);
           setIsAudioEnabled(false);
           toast.error('فشل تشغيل الصوت. يرجى تفعيل الإشعارات الصوتية.');
-
         });
     }
   };
 
   return (
-    <div>
+    <div className='flex gap-4 items-center justify-center mb-16'>
       <audio ref={audioRef} src={soundUrl} />
-      <button onClick={toggleMute} className="bg-blue-500 text-white px-4 py-2 rounded mr-2">
+      <button onClick={toggleMute} className="bg-primary text-white px-4 py-2 rounded mr-2">
         {isMuted ? 'تفعيل الصوت' : 'كتم الصوت'}
       </button>
-      <button onClick={testSound} className="bg-green-500 text-white px-4 py-2 rounded mr-2">
+      <button onClick={testSound} className="bg-secondary text-white px-4 py-2 rounded mr-2">
         اختبار الصوت
       </button>
       {!isAudioEnabled && (

@@ -23,7 +23,6 @@ export default function ManagerPage() {
     setPlaySound(false);
   }, []);
 
-
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) signIn();
@@ -65,16 +64,15 @@ export default function ManagerPage() {
   if (status === 'loading' || !session) {
     return <p>جارٍ التحميل...</p>;
   }
-  
 
   return (
     <div className="container mx-auto p-4">
-            <SoundPlayer 
+      <SoundPlayer 
         soundUrl="/notification.mp3" 
         play={playSound}
         onPlayEnd={handlePlayEnd}
       />
-      <h1 className="text-2xl font-bold mb-4">صفحة القائد</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">صفحة المدير</h1>
       <VisitList 
         visits={visits.filter(visit => !visit.isHidden)} 
         showActions={true} 
@@ -82,12 +80,12 @@ export default function ManagerPage() {
         showStatusButtons={true}
       />
 
-            {showNotification && (
-        <div className="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded shadow-lg">
+      {showNotification && (
+        <div className="fixed bottom-4 right-4 bg-primary text-white p-4 rounded shadow-lg">
           تمت إضافة زيارة جديدة!
           <button 
             onClick={() => setShowNotification(false)} 
-            className="ml-2 bg-white text-blue-500 px-2 py-1 rounded"
+            className="ml-2 bg-white text-primary px-2 py-1 rounded"
           >
             إغلاق
           </button>

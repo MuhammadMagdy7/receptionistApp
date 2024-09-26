@@ -45,10 +45,10 @@ export default function EditOrganizationPage({ params }) {
       if (!response.ok) throw new Error('Failed to update organization');
 
       toast.success('تم تحديث الجهة بنجاح');
-
       router.push('/admin/organizations');
     } catch (err) {
       setError('حدث خطأ أثناء تحديث الجهة');
+      toast.error('حدث خطأ أثناء تحديث الجهة');
     }
   };
 
@@ -59,21 +59,21 @@ export default function EditOrganizationPage({ params }) {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">تعديل الجهة</h1>
-      <form onSubmit={handleSubmit} className="max-w-md">
+      <h1 className="text-2xl font-bold mb-4 text-center">تعديل الجهة</h1>
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-6 rounded shadow-md">
         <input
           type="text"
           value={organizationName}
           onChange={(e) => setOrganizationName(e.target.value)}
           placeholder="اسم الجهة"
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+        <button type="submit" className="w-full bg-primary text-white p-3 rounded hover:bg-primaryHover transition">
           تحديث الجهة
         </button>
       </form>
-      {error &&toast.error(error)}
+      {error && <p className="text-danger mt-4 text-center">{error}</p>}
     </div>
   );
 }
