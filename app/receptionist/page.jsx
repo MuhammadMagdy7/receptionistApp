@@ -24,6 +24,7 @@ export default function ReceptionistPage() {
     setPlaySound(false);
   }, []);
 
+
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) signIn();
@@ -47,7 +48,6 @@ export default function ReceptionistPage() {
       socket.on('visit:added', (newVisit) => {
         console.log('New visit added:', newVisit);
         dispatch(addVisitToStore(newVisit));
-        setPlaySound(true);
       });
 
       socket.on('visit:deleted', (deletedVisitId) => {
@@ -95,6 +95,11 @@ export default function ReceptionistPage() {
 
   return (
     <div className="container mx-auto p-4">
+            <SoundPlayer 
+        soundUrl="/notification.mp3" 
+        play={playSound}
+        onPlayEnd={handlePlayEnd}
+      />
       <h1 className="text-2xl font-bold mb-4">صفحة الاستقبال</h1>
       <VisitForm onSubmit={handleAddVisit} />
       {fetchStatus === 'loading' && <p>جارٍ تحميل الزيارات...</p>}
@@ -105,11 +110,8 @@ export default function ReceptionistPage() {
         onDeleteVisit={handleDeleteVisit}
         showStatusButtons={false}
       />
-      <SoundPlayer 
-        soundUrl="/notification.mp3" 
-        play={playSound}
-        onPlayEnd={handlePlayEnd}
-      />
+
+
     </div>
   );
 }
