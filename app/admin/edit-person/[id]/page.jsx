@@ -19,34 +19,34 @@ export default function EditPersonPage({ params }) {
 
   useEffect(() => {
     if (session?.user.role === 'receptionist') {
+      const fetchPerson = async () => {
+        try {
+          const response = await fetch(`/api/people/${id}`);
+          if (!response.ok) throw new Error('Failed to fetch person');
+          const data = await response.json();
+          setName(data.name);
+          setTitle(data.title);
+          setOrganizationId(data.organization._id);
+        } catch (err) {
+          setError('حدث خطأ أثناء جلب بيانات الشخص');
+        }
+      };
+
+      const fetchOrganizations = async () => {
+        try {
+          const response = await fetch('/api/organizations');
+          if (!response.ok) throw new Error('Failed to fetch organizations');
+          const data = await response.json();
+          setOrganizations(data);
+        } catch (err) {
+          setError('حدث خطأ أثناء جلب بيانات الجهات');
+        }
+      };
+
       fetchPerson();
       fetchOrganizations();
     }
   }, [session, id]);
-
-  const fetchPerson = async () => {
-    try {
-      const response = await fetch(`/api/people/${id}`);
-      if (!response.ok) throw new Error('Failed to fetch person');
-      const data = await response.json();
-      setName(data.name);
-      setTitle(data.title);
-      setOrganizationId(data.organization._id);
-    } catch (err) {
-      setError('حدث خطأ أثناء جلب بيانات الشخص');
-    }
-  };
-
-  const fetchOrganizations = async () => {
-    try {
-      const response = await fetch('/api/organizations');
-      if (!response.ok) throw new Error('Failed to fetch organizations');
-      const data = await response.json();
-      setOrganizations(data);
-    } catch (err) {
-      setError('حدث خطأ أثناء جلب بيانات الجهات');
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

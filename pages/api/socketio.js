@@ -48,18 +48,18 @@ export default function SocketHandler(req, res) {
       }
     });
 
-    socket.on('visit:hide', async (id) => {
-      try {
-        const hiddenVisit = await Visit.findByIdAndUpdate(
-          id,
-          { isHidden: true },
-          { new: true }
-        );
-        io.emit('visit:hidden', hiddenVisit._id);
-      } catch (error) {
-        console.error('Error hiding visit:', error);
-      }
-    });
+    // socket.on('visit:hide', async (id) => {
+    //   try {
+    //     const hiddenVisit = await Visit.findByIdAndUpdate(
+    //       id,
+    //       { isHidden: true },
+    //       { new: true }
+    //     );
+    //     io.emit('visit:hidden', hiddenVisit._id);
+    //   } catch (error) {
+    //     console.error('Error hiding visit:', error);
+    //   }
+    // });
 
 
     socket.on('visit:delete', async (id) => {

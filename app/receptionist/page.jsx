@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addVisitAsync, fetchVisits, deleteVisitAsync, updateVisitInStore, addVisitToStore, removeVisitFromStore } from '@/lib/redux/visitSlice';
+import { fetchVisits, updateVisitInStore, addVisitToStore, removeVisitFromStore } from '@/lib/redux/visitSlice';
 import VisitForm from '@/components/VisitForm';
 import VisitList from '@/components/VisitList';
 import { useWebSocket } from '@/contexts/WebSocketContext';

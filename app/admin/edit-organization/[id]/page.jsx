@@ -16,20 +16,20 @@ export default function EditOrganizationPage({ params }) {
 
   useEffect(() => {
     if (session?.user.role === 'receptionist') {
+      const fetchOrganization = async () => {
+        try {
+          const response = await fetch(`/api/organizations/${id}`);
+          if (!response.ok) throw new Error('Failed to fetch organization');
+          const data = await response.json();
+          setOrganizationName(data.name);
+        } catch (err) {
+          setError('حدث خطأ أثناء جلب بيانات الجهة');
+        }
+      };
+
       fetchOrganization();
     }
   }, [session, id]);
-
-  const fetchOrganization = async () => {
-    try {
-      const response = await fetch(`/api/organizations/${id}`);
-      if (!response.ok) throw new Error('Failed to fetch organization');
-      const data = await response.json();
-      setOrganizationName(data.name);
-    } catch (err) {
-      setError('حدث خطأ أثناء جلب بيانات الجهة');
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +48,6 @@ export default function EditOrganizationPage({ params }) {
       router.push('/admin/organizations');
     } catch (err) {
       setError('حدث خطأ أثناء تحديث الجهة');
-      toast.error('حدث خطأ أثناء تحديث الجهة');
     }
   };
 
