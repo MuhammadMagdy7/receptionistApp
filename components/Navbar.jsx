@@ -18,11 +18,11 @@ export default function Navbar() {
               <Link href="/receptionist" className="text-white mr-4">
                 الاستقبال
               </Link>
-              <Link href="/admin/add-organization" className="text-white mr-4">
-                إضافة جهة
+              <Link href="/admin/organizations" className="text-white mr-4">
+                الجهات
               </Link>
-              <Link href="/admin/add-person" className="text-white mr-4">
-                إضافة شخص
+              <Link href="/admin/people" className="text-white mr-4">
+                الأشخاص
               </Link>
             </>
           )}
@@ -33,20 +33,15 @@ export default function Navbar() {
           )}
           {session ? (
             <div>
-              <Link href="/visit-history" > السجل </Link>
-
-
+              <Link href="/visit-history" className="text-white mr-4">السجل</Link>
               <button onClick={() => signOut()} className="text-white">
-              تسجيل الخروج
-            </button>
-
+                تسجيل الخروج
+              </button>
             </div>
-
           ) : (
             <Link href="/api/auth/signin" className="text-white">
               تسجيل الدخول
             </Link>
-
           )}
         </div>
       </div>

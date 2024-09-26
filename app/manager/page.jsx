@@ -68,7 +68,7 @@ export default function ManagerPage() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">صفحة القائد</h1>
       <VisitList 
-        visits={visibleVisits} 
+        visits={visits.filter(visit => !visit.isHidden)} 
         showActions={true} 
         onStatusUpdate={handleStatusUpdate} 
         showStatusButtons={true}
@@ -81,4 +81,3 @@ export default function ManagerPage() {
     </div>
   );
 }
-// notification.mp3

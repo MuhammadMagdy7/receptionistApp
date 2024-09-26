@@ -2,8 +2,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession, signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import AccessDenied from '@/components/AccessDenied';
 
 export default function AddOrganizationPage() {
   const [organizationName, setOrganizationName] = useState('');
@@ -13,8 +14,7 @@ export default function AddOrganizationPage() {
 
   if (status === 'loading') return <p>جاري التحميل...</p>;
   if (!session || session.user.role !== 'receptionist') {
-    signIn();
-    return null;
+    return <AccessDenied />;
   }
 
   const handleSubmit = async (e) => {
@@ -30,8 +30,10 @@ export default function AddOrganizationPage() {
 
       if (!response.ok) throw new Error('Failed to add organization');
 
+      const data = await response.json();
       setOrganizationName('');
       alert('تمت إضافة الجهة بنجاح');
+      router.push('/admin/organizations'); // افتراض وجود صفحة لعرض الجهات
     } catch (err) {
       setError('حدث خطأ أثناء إضافة الجهة');
     }
@@ -49,7 +51,7 @@ export default function AddOrganizationPage() {
           className="w-full p-2 mb-4 border rounded"
           required
         />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
           إضافة الجهة
         </button>
       </form>
