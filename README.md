@@ -47,8 +47,11 @@ npm install
 3. **Set up environment variables:**
 
    Rename `.env.example` to `.env.local` and add values to variables:
+4. **Set up the accounts :**
+bash
+node scripts/createUsers.js
 
-4. **Run the development server:**
+5. **Run the development server:**
 
 bash
 npm run dev
