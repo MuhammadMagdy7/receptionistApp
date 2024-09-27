@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '.env.local' });
 var mongoose = require('mongoose');
 var connectToDatabase = require('./db');
 var User = require('./User');
@@ -9,14 +10,14 @@ async function createUsers() {
   var users = [
     {
       name: 'مدير النظام',
-      email: 'admin@admin.com',
-      password: bcrypt.hashSync('admin1234', 10),
+      email: process.env.AMDIN_EMAIL,
+      password: bcrypt.hashSync(process.env.AMDIN_PASS, 10),
       role: 'manager'
     },
     {
       name: 'مستقبل النظام',
-      email: 'user@user.com',
-      password: bcrypt.hashSync('user1234', 10),
+      email: process.env.USER_EMAIL,
+      password: bcrypt.hashSync(process.env.USER_PASS, 10),
       role: 'receptionist'
     }
   ];
