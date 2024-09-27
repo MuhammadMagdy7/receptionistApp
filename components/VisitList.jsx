@@ -2,8 +2,16 @@
 import PropTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
 import { ar } from 'date-fns/locale';
+import { useEffect, useState } from 'react';
 
 export default function VisitList({ visits, showActions = false, onStatusUpdate, onDeleteVisit, showStatusButtons = true }) {
+  const [countVisits, setCountVisits] = useState(0);
+
+  useEffect(() => {
+    setCountVisits(visits.length)
+
+  }, [visits]);
+
   if (visits.length === 0) {
     return <p>لا توجد زيارات مسجلة.</p>;
   }
@@ -30,7 +38,11 @@ export default function VisitList({ visits, showActions = false, onStatusUpdate,
 
   return (
     <div className="mt-4">
+      <div className='flex justify-between'>
       <h2 className="text-xl font-semibold mb-2 text-center">قائمة الزيارات</h2>
+      <p> عدد الزيارات <span className='bg-red-300 p-2 rounded-md'>{countVisits}</span></p>
+
+      </div>
       <table className="min-w-full bg-white border rounded shadow-md">
         <thead>
           <tr className="bg-gray-200">

@@ -19,6 +19,7 @@ export default function ManagerPage() {
   const [playSound, setPlaySound] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
 
+
   const handlePlayEnd = useCallback(() => {
     setPlaySound(false);
   }, []);
