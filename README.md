@@ -35,7 +35,7 @@ This is a Visit Management System built with Next.js, React, and Redux. It allow
 
 bash
 git clone https://github.com/MuhammadMagdy7/receptionistApp.git
-cd visit-management-system
+cd receptionistApp
 
 
 2. **Install dependencies:**
